@@ -1,0 +1,114 @@
+package com.example.lharr.contactapplication;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import java.security.acl.Group;
+
+
+public class SQLiteDbHelper extends SQLiteOpenHelper
+{
+    public static final String Contact_Info = "people.db";
+
+    public static final String Contact = "people_table";
+    public static final String contactID = "Contact ID";
+    public static final String personalEmail = "Personal Email";
+    public static final String personalPhone = "Personal Phone";
+    public static final String jobTitle = "Job Title";
+
+    public static final String Name = "people_table";
+    public static final String nameID = "Name ID";
+    public static final String firstName = "First Name";
+    public static final String lastName = "LastName";
+
+    public static final String Address = "people_table";
+    public static final String addressID = "Address ID";
+    public static final String streetAddress = "Street Address";
+    public static final String extendedAddress = "Extended Address";
+    public static final String city = "City";
+    public static final String region = "Region";
+    public static final String zipCode = "Zip Code";
+
+    public static final String Business = "people_table";
+    public static final String businessID = "Business ID";
+    public static final String businessName = "Business Email";
+    public static final String businessPhone = "Business Phone";
+    public static final String firstContact = "First Contact";
+    public static final String contactSource = "Contact Source";
+
+    public static final String ContactGroup = "people_table";
+    public static final String groupID = "Group ID";
+    public static final String groupName = "Group Name";
+
+
+    public SQLiteDbHelper (Context context) {
+        super(context, Contact_Info, null, 1);
+    }
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createContactTable = "CREATE TABLE" + Contact +
+                "(Contact ID INTEGER PRIMARY KEY AUTOCRIMENT, " +
+                "Personal Email TEXT, Personal Phone TEXT, Job Title TEXT," +
+                "Name ID INTEGER FOREIGN KEY, Address ID INTEGER FOREIGN KEY, Business ID INTEGER FOREIGN KEY, Group ID INTEGER FOREIGN KEY)";
+
+        String createNameTable = "CREATE TABLE" + Name +
+                "Name ID INTEGER PRIMARY KEY AUTOCRIMENT, " +
+                "First Name TEXT, Last Name TEXT";
+
+        String createAddressTable = "CREATE TABLE" + Address +
+                "Address ID INTEGER PRIMARY KEY AUTOCRIMENT, " +
+                "Street Address TEXT,Extended Address TEXT,City TEXT,Region TEXT,Zip Code TEXT";
+
+        String createBusinessTable = "CREATE TABLE" + Business +
+                "Business ID INTEGER PRIMARY KEY AUTOCRIMENT, " +
+                "Business Email TEXT,Business Phone TEXT,First Contact TEXT,Contact Source TEXT" +
+                "Address ID INTEGER FOREIGN KEY";
+
+        String createGroupTable = "CREATE TABLE" + ContactGroup +
+                "Group ID INTEGER PRIMARY KEY AUTOCRIMENT, " +
+                "Group Name TEXT";
+
+        db.execSQL(createContactTable);
+        db.execSQL(createNameTable);
+        db.execSQL(createAddressTable);
+        db.execSQL(createBusinessTable);
+        db.execSQL(createGroupTable);
+
+           }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP IF TABLE EXISTS" + Contact);
+        db.execSQL("DROP IF TABLE EXISTS" + Name);
+        db.execSQL("DROP IF TABLE EXISTS" + Address);
+        db.execSQL("DROP IF TABLE EXISTS" + Business);
+        db.execSQL("DROP IF TABLE EXISTS" + ContactGroup);
+        onCreate(db);
+    }
+
+    public boolean addContact(String personalEmail,String personalPhone, String jobTitle, String firstName, String lastName,String streetAddress,String extendedAddress,String city,String region,String zipCode, String businessEmail,String businessPhone,String firstContact,String contactSource, String groupName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(personalEmail,personalEmail);
+        contentValues.put(personalPhone,personalPhone);
+        contentValues.put(jobTitle,jobTitle);
+        contentValues.put(firstName,firstName);
+        contentValues.put(lastName,lastName);
+        contentValues.put(streetAddress,streetAddress);
+        contentValues.put(extendedAddress,extendedAddress);
+        contentValues.put(city,city);
+        contentValues.put(region,region);
+        contentValues.put(businessEmail,businessEmail);
+        contentValues.put(businessPhone,businessPhone);
+        contentValues.put(firstContact,firstContact);
+        contentValues.put(contactSource,contactSource);
+        contentValues.put(groupName,groupName);
+
+    }
+
+}
